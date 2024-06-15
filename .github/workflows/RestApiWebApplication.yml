@@ -1,10 +1,10 @@
-name: .NET Core 애플리케이션을 빌드하고 restapiwebapp 웹앱에 배포
+name: .NET Core 애플리케이션을 빌드하고 RestApiWebApplication 웹앱에 배포
 on:
   push:
     branches:
     - master
 env:
-  AZURE_WEBAPP_NAME: restapiwebapp
+  AZURE_WEBAPP_NAME: RestApiWebApplication
   AZURE_WEBAPP_PACKAGE_PATH: BoardRestApiWebApp\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.restapiwebapp_10C5 }}
+        publish-profile: ${{ secrets.RestApiWebApplication_11DC }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
