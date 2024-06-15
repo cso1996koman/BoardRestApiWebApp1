@@ -26,7 +26,7 @@ namespace RestApiProject.Controllers.v1
             _repository = repository;
             _mapper = mapper;
         }
-        [HttpGet("{UserBoardId}")]
+        [HttpGet("{userBoardId:int}")]
         [AllowAnonymous]
         public async Task<ApiResult<UserBoardCommentDto>> GetByUserBoardId(int userBoardId, CancellationToken cancellationToken)
         {
