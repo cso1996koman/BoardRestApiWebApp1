@@ -18,6 +18,8 @@
    * Entity, Model 간에 변수네이밍을 통한 매핑  
 ## 컨트롤러 모듈 로직
    * <Dto , Entity> 간에 자동 매핑을 통해 Dto 데이터 캡슐화
+## 모듈 설계
+   * Asp .Net Core Mvc를 활용하여 Model, Controller, View(Swagger)로 분할
 ## Swagger을 통한 Rest Api 테스팅 및 문서화
    * Http 버전 관리
    * JWT, OAuth 기반 인증 적용
@@ -31,15 +33,15 @@
   ### 2.1 관리자(Admin)
      - 모든기능 가능
   ### 2.2 일반 이용자
-     - Topic (Create, Update, Delete) 기능, User (All Get) 을 제외한 모든 Scheme에 대한 기능
+     - Topic (Post, Put, Delete) 기능, User (All Get) 을 제외한 모든 Scheme에 대한 기능
 ## 3. 예외 시나리오
   ### 3.1. 예외 상황
-     - 비로그인상태 모든 Scheme에 대한 Create, Update, Delete 기능 사용
+     - 비로그인상태 모든 Scheme에 대한 Post, Put, Delete 기능 사용
      - 관리자외에 User All Get, Delete 기능 사용
-     - 관리자외에 Topic Create, Update, Delete 기능 사용
+     - 관리자외에 Topic Post, Put, Delete 기능 사용
      - 비타당한 입력값을 가진 요청
-         * NotNull Input에 대해 Null값 (ex. UserBoard Create시 Content Null값 입력)
-         * 외래키 충돌 (ex. 존재하지 않는 UserID 및 TopicId를 입력한 UserBoard Create 요청) 등
+         * NotNull Input에 대해 Null값 (ex. UserBoard Put시 Content Null값 입력)
+         * 외래키 충돌 (ex. 존재하지 않는 UserID 및 TopicId를 입력한 UserBoard Post 요청) 등
  ### 3.2. 예외 결과
     - 비권한 접근 예외
     - 외래키 충돌 예외
@@ -51,32 +53,32 @@
   - ...
 ## 5. 테스트 시나리오 [모든 id는 1부터 순차적으로 할당(계정 로그인시 사용되는 id는 fullname에 해당)] 
   ### 5.1. 게시글 등록
-    1. 사용자 계정 생성(User Create) 혹은 기존 계정 로그인(3.으로)
+    1. 사용자 계정 생성(User Post) 혹은 기존 계정 로그인(3.으로)
     2. 생성한 계정으로 로그인(Authorize)
-    3. NotNull입력값 모두 입력이후 UserBoard Create(NotNullInput : title, content, authorId(userId))
-    4. Get byTitle을 이용하여 입력한 게시글 확인
+    3. NotNull입력값 모두 입력이후 UserBoard Post(NotNullInput : title, content, authorId(userId)) [Get /api/v1/Users/Fullname 요청을 통해 id(userId) 확인]
+    4. Get /api/v1/UserBoards/title을 이용하여 입력한 게시글 확인
   ### 5.2. 게시글 수정
-    1. 사용자 계정 생성(User Create) 혹은 기존 계정 로그인(3.으로)
+    1. 사용자 계정 생성(User Post) 혹은 기존 계정 로그인(3.으로)
     2. 생성한 계정으로 로그인(Authorize) 
-    3. NotNull입력값 모두 입력이후 UserBoard Update(NotNullInput : title, content, authorId(userId)) 
-    4. Get byTitle을 이용하여 수정한 게시글 확인
+    3. NotNull입력값 모두 입력이후 UserBoard Put(NotNullInput : title, content, authorId(userId)) [Get /api/v1/Users/Fullname 요청을 통해 id(userId) 확인]
+    4. Get /api/v1/UserBoards/title 을 이용하여 수정한 게시글 확인
   ### 5.3. 게시글 삭제
-    1. 사용자 계정 생성(User Create) 혹은 기존 계정 로그인(3.으로) 
+    1. 사용자 계정 생성(User Post) 혹은 기존 계정 로그인(3.으로) 
     2. 생성한 계정으로 로그인(Authorize) 
     3. UserBoardId값 입력이후 UserBoard Delete 
-    4. Get byTitle을 이용하여 삭제 확인
+    4. Get /api/v1/UserBoards/title 을 이용하여 삭제 확인 -> NotFound
   ### 5.2. 주제 등록 
     1. User에 기존 데이터인 Admin으로 Authorize 로그인 [초기 데이터 Admin 참조]
-    2. NotNull입력값 모두 입력이후 Topic Create(NotNullInput : title, authorId(userId)) 
-    3. Get byId를 이용하여 입력한 토픽 확인
+    2. NotNull입력값 모두 입력이후 Topic Post(NotNullInput : title, authorId(userId)) [Get /api/v1/Users/Fullname 요청을 통해 id(userId) 확인]
+    3. Topic Scheme에 Get /api/v1/Topics/title 이용하여 입력한 토픽 확인
   ### 5.3. 게시글 댓글 등록
     1. 사용자 계정 생성(User Create) 혹은 기존 계정 로그인(3.으로) 
     2. 생성한 계정을 로그인(Authorize) 
-    3. NotNull입력값 모두 입력이후 UserBoardComment Create(NotNullInput : content, userboardId, authorId(userId)) 
-    4. Get UserBoardbyId을 이용하여 게시글에 등록한 댓글확인
+    3. NotNull입력값 모두 입력이후 UserBoardComment Post(NotNullInput : content, userboardId, authorId(userId)) [Get /api/v1/UserBoards/title 요청을 통해 id(userboardId) 확인] [Get /api/v1/Users/Fullname 요청을 통해 id(userId) 확인] 
+    4. UserBoardComment Schem에 Get /api/v1/byUserboardTitle 을 이용하여 게시글에 등록한 댓글확인
   ### 5.4. 게시글 주제 등록
     1. 사용자 계정 생성(User Create) 혹은 기존 계정 로그인(3.으로) 
     2. 생성한 계정을 로그인(Authorize) 
-    3. NotNull입력값 모두 입력이후 UserBoardTopic Create(NotNullInput : topicId, userBoardId) 
-    4. Get UserBoardbyId을 이용하여 게시글에 등록한 주제 확인
+    3. NotNull입력값 모두 입력이후 UserBoardTopic Scheme에 Post(NotNullInput : topicId, userBoardId) [Get /api/v1/Topics/title 요청을 통해 id(topicId) 확인] [Get /api/v1/UserBoards/title 요청을 통해 id(userBoardId) 확인]
+    4. UserBoardTopic Schem에 Get /api/v1/UserBoardTopics/userBoardId을 이용하여 게시글에 등록한 주제 확인
 
