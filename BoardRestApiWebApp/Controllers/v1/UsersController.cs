@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using WebFramework.Api;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using System.Linq;
 namespace RestApiProject.Controllers.v1
 {
     [ApiVersion("1")]
@@ -85,6 +86,10 @@ namespace RestApiProject.Controllers.v1
         [AllowAnonymous]
         public virtual async Task<ApiResult<User>> Create(UserDto userDto, CancellationToken cancellationToken)
         {
+            if(userRepository.TableNoTracking.Where(user => user.FullName.Equals(userDto.FullName)).Count() > 0)
+            {
+                return BadRequest("중복된 FullName");
+            }
             logger.LogError("Create 메소드가 호출되었습니다.");
             HttpContext.RiseError(new Exception("생성 메소드 호출"));
             var user = new User

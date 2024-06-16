@@ -51,11 +51,15 @@ namespace RestApiProject.Controllers.v1
             return Ok(list);
         }
         [HttpPost]
-        public virtual async Task<ApiResult<UserBoardTopicDto>> Create(UserBoardTopicDto dto, CancellationToken cancellationToken)
+        public virtual async Task<ApiResult<UserBoardTopicCreateDto>> Create(UserBoardTopicCreateDto dto, CancellationToken cancellationToken)
         {
+            if(_repository.TableNoTracking.Where(userboardtopic => (userboardtopic.UserBoardId == dto.UserBoardId) && (userboardtopic.TopicId == dto.TopicId)).Count() > 0)
+            {
+                return BadRequest("이미 토픽을 가진 주제");
+            }
             var model = dto.ToEntity(_mapper);
             await _repository.AddAsync(model, cancellationToken);
-            var resultDto = await _repository.TableNoTracking.ProjectTo<UserBoardTopicDto>(_mapper.ConfigurationProvider)
+            var resultDto = await _repository.TableNoTracking.ProjectTo<UserBoardTopicCreateDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id.Equals(model.Id), cancellationToken);
             return resultDto;
         }

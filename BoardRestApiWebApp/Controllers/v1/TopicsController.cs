@@ -61,6 +61,10 @@ namespace RestApiProject.Controllers.v1
         [Authorize(Roles = "Admin")]
         public virtual async Task<ApiResult<TopicDto>> Create(TopicDto dto, CancellationToken cancellationToken)
         {
+            if (_repository.TableNoTracking.Where(topic => topic.Title.Equals(dto.Title)).Count() > 0)
+            {
+                return BadRequest("중복 주제");
+            }
             var model = dto.ToEntity(_mapper);
             await _repository.AddAsync(model, cancellationToken);
             var resultDto = await _repository.TableNoTracking.ProjectTo<TopicDto>(_mapper.ConfigurationProvider)
@@ -79,7 +83,7 @@ namespace RestApiProject.Controllers.v1
             return resultDto;
         }
 
-        [HttpDelete("{topicId}")]
+        [HttpDelete("{topicId:int}")]
         [Authorize(Roles = "Admin")]
         public virtual async Task<ApiResult> DeletebyTopicId(int topicId, CancellationToken cancellationToken)
         {

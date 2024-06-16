@@ -13,4 +13,11 @@ namespace RestApiProject.Models
         public UserBoard UserBoard { get; set; }
         public Topic Topic { get; set; }
     }
+    public class UserBoardTopicCreateDto : BaseDto<UserBoardTopicCreateDto, UserBoardTopic, int>
+    {
+        [Required]
+        public int TopicId { get; set; }
+        [Required]
+        public int UserBoardId { get; set; }
+    }
 }
