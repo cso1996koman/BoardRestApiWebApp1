@@ -39,17 +39,27 @@ namespace RestApiProject.Controllers.v1
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public virtual async Task<ActionResult<List<User>>> Get(CancellationToken cancellationToken)
+        public virtual async Task<ActionResult<List<User>>> GetAllUser(CancellationToken cancellationToken)
         {
             var users = await userRepository.TableNoTracking.ToListAsync(cancellationToken);
             return Ok(users);
         }
         [HttpGet("{id:int}")]
-        public virtual async Task<ApiResult<User>> Get(int id, CancellationToken cancellationToken)
+        public virtual async Task<ApiResult<User>> GetUserbyId(int id, CancellationToken cancellationToken)
         {
             var user2 = await userManager.FindByIdAsync(id.ToString());
             var role = await roleManager.FindByNameAsync("Admin");
             var user = await userRepository.GetByIdAsync(cancellationToken, id);
+            if (user == null)
+                return NotFound();
+            await userManager.UpdateSecurityStampAsync(user);
+            return user;
+        }
+        [HttpGet("{fullname}")]
+        public virtual async Task<ApiResult<User>> GetUserbyFullname(string fullname, CancellationToken cancellationToken)
+        {
+            var managingUser = await userManager.FindByNameAsync(fullname);
+            var user = await userRepository.GetByIdAsync(cancellationToken, managingUser.Id);
             if (user == null)
                 return NotFound();
             await userManager.UpdateSecurityStampAsync(user);

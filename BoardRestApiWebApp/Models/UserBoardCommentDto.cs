@@ -15,5 +15,6 @@ namespace RestApiProject.Models
         public DateTimeOffset CreateDate { get; set; }
         [Required]
         public int AuthorId { get; set; }
+        public UserBoard UserBoard { get; set; }
     }
 }

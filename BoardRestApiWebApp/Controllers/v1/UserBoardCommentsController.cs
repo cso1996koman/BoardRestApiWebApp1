@@ -38,6 +38,18 @@ namespace RestApiProject.Controllers.v1
             }
             return Ok(list);
         }
+        [HttpGet("{userboardtitle}")]
+        [AllowAnonymous]
+        public async Task<ApiResult<List<UserBoardCommentDto>>> GetByUserBoardTitle(string userboardtitle, CancellationToken cancellationToken)
+        {
+            var list = await _repository.TableNoTracking.ProjectTo<UserBoardCommentDto>(_mapper.ConfigurationProvider)
+                .Where(userboardcommentdto => userboardcommentdto.UserBoard.Title.Equals(userboardtitle)).ToListAsync(cancellationToken);
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
         [HttpGet]
         [AllowAnonymous]
         public async Task<ApiResult<List<UserBoardCommentDto>>> GetAll(CancellationToken cancellationToken)

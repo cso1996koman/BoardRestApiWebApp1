@@ -26,12 +26,24 @@ namespace RestApiProject.Controllers.v1
             _repository = repository;
             _mapper = mapper;
         }
-        [HttpGet("{id:int}")]
+        [HttpGet("{userBoardId:int}")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserBoardTopicDto>> GetByUserBoardId(int userBoardId, CancellationToken cancellationToken)
+        public async Task<ActionResult<UserBoardTopicDto>> GetUserBoardTopicByUserBoardId(int userBoardId, CancellationToken cancellationToken)
         {
             var list = await _repository.TableNoTracking.ProjectTo<UserBoardTopicDto>(_mapper.ConfigurationProvider)
                 .Where(userboardtopicdto => userboardtopicdto.UserBoardId == userBoardId).ToListAsync(cancellationToken);
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        [HttpGet("{topic}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserBoardTopicDto>> GetUserBoardTopicByTopic(string topic, CancellationToken cancellationToken)
+        {
+            var list = await _repository.TableNoTracking.ProjectTo<UserBoardTopicDto>(_mapper.ConfigurationProvider)
+                .Where(userboardtopicdto => userboardtopicdto.Topic.Title.Equals(topic)).ToListAsync(cancellationToken);
             if (list.IsNullOrEmpty())
             {
                 return NotFound();

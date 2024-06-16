@@ -21,6 +21,8 @@ namespace Entities
         public int AuthorId { get; set; }
         [ForeignKey(nameof(AuthorId))]
         public User User { get; set; }
+        [ForeignKey(nameof(UserBoardId))]
+        public UserBoard UserBoard { get; set; }
         public const int ENTITY_USERBOARDCOMMENT_CONTENT_MAX_LENGTH = 1000;
     }
 }

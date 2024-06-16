@@ -10,5 +10,7 @@ namespace RestApiProject.Models
         public int TopicId { get; set; }
         [Required]
         public int UserBoardId { get; set; }
+        public UserBoard UserBoard { get; set; }
+        public Topic Topic { get; set; }
     }
 }

@@ -29,13 +29,17 @@ namespace RestApiProject.Controllers.v2
         {
             return base.Delete(id, cancellationToken);
         }
-        public override Task<ActionResult<List<User>>> Get(CancellationToken cancellationToken)
+        public override Task<ActionResult<List<User>>> GetAllUser(CancellationToken cancellationToken)
         {
-            return base.Get(cancellationToken);
+            return base.GetAllUser(cancellationToken);
         }
-        public override Task<ApiResult<User>> Get(int id, CancellationToken cancellationToken)
+        public override Task<ApiResult<User>> GetUserbyId(int id, CancellationToken cancellationToken)
         {
-            return base.Get(id, cancellationToken);
+            return base.GetUserbyId(id, cancellationToken);
+        }
+        public override Task<ApiResult<User>> GetUserbyFullname(string fullname, CancellationToken cancellationToken)
+        {
+            return base.GetUserbyFullname(fullname, cancellationToken);
         }
         public override Task<ActionResult> Token([FromForm] TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
