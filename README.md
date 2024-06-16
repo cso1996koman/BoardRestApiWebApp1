@@ -42,11 +42,13 @@
      - 비타당한 입력값을 가진 요청
          * NotNull Input에 대해 Null값 (ex. UserBoard Put시 Content Null값 입력)
          * 외래키 충돌 (ex. 존재하지 않는 UserID 및 TopicId를 입력한 UserBoard Post 요청) 등
+         * 중복 데이터 (ex. 같은 title 가진 주제 생성, 같은 fullname 가진 사용자 생성, 게시글에 대한 같은 주제 생성)
  ### 3.2. 예외 결과
     - 비권한 접근 예외
     - 외래키 충돌 예외
     - Not Found 예외
     - 무응답
+    - Bad Request 예외 (중복 데이터)
 ## 4. 초기 데이터값
   - UserData (Id(fullname) : adminsample1, password : 123456) - Admin role을 가진 계정
   - Topic [(title : 중고판매), (title : 신발의류), (title : 전자제품), (title : 식자재)]
