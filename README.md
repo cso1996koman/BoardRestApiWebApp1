@@ -19,7 +19,7 @@
 ## 컨트롤러 모듈 로직
    * <Dto , Entity> 간에 자동 매핑을 통해 Dto 데이터 캡슐화
 ## 모듈 설계
-   * Asp .Net Core Mvc를 활용하여 Model, Controller, View(Swagger)로 분할
+   * Asp .Net Core Mvc를 활용하여 Model, Controller, View(Swagger), ApiResultFilter, ExceptionHandlerMiddleware로 분할
 ## Swagger을 통한 Rest Api 테스팅 및 문서화
    * Http 버전 관리
    * JWT, OAuth 기반 인증 적용
