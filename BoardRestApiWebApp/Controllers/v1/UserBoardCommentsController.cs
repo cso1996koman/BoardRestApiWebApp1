@@ -59,11 +59,11 @@ namespace RestApiProject.Controllers.v1
             return Ok(list);
         }
         [HttpPost]
-        public virtual async Task<ApiResult<UserBoardCommentDto>> Create(UserBoardCommentDto dto, CancellationToken cancellationToken)
+        public virtual async Task<ApiResult<UserBoardCommentCreateDto>> Create(UserBoardCommentCreateDto dto, CancellationToken cancellationToken)
         {
             var model = dto.ToEntity(_mapper);
             await _repository.AddAsync(model, cancellationToken);
-            var resultDto = await _repository.TableNoTracking.ProjectTo<UserBoardCommentDto>(_mapper.ConfigurationProvider)
+            var resultDto = await _repository.TableNoTracking.ProjectTo<UserBoardCommentCreateDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id.Equals(model.Id), cancellationToken);
             return resultDto;
         }
